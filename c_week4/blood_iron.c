@@ -10,10 +10,6 @@ int main()
 
     // get filename from the user
     printf("Please enter the name of the data file: ");
-
-    // these lines read in a line from the stdin (where the user types)
-    // and then takes the actual string out of it
-    // this removes any spaces or newlines.
     fgets(line, buffer_size, stdin);
     sscanf(line, " %s ", filename);
 
