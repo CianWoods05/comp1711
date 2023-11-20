@@ -53,6 +53,10 @@ int main() {
 	char filename[buffer_size];
     FITNESS_DATA stepRecord [1000];
 	char choice;
+	int lowest, highest;
+	double mean;
+	int start,end;
+	int lowI , highI;
 
 	
 
@@ -100,36 +104,74 @@ int main() {
         			numRows += 1;
     				}
 				}
-
-			printf("Number of records in file: %d\n", numRows);
-			for(i = 0; i < 3; i++){
-        		printf("%s/%s/%d\n", stepRecord[i].date , stepRecord[i].time , stepRecord[i].steps);
-    		}	
 		break;
 
 		case 'B':
         case 'b':
-			
+			if (!filename)
+        		{
+           	 	printf("Error: could not open file\n");
+           		return 1;
+				}
+
+			printf("Number of records in file: %d\n", numRows);
 		break;
 
 		case 'C':
         case 'c':
-
+			if (!filename)
+        		{
+           	 	printf("Error: could not open file\n");
+           		return 1;
+				}
+			lowest = stepRecord[0].steps;
+			for(i = 1; i <= numRows; i++){
+				if(stepRecord[i].steps < lowest){
+					lowest = stepRecord[i].steps;
+					lowI = i;
+				}
+			}
+			printf("Fewest Steps: %s %s\n", stepRecord[lowI].date, stepRecord[lowI].time);
 		break;
 
 		case 'D':
         case 'd':
-
+			if (!filename)
+        		{
+           	 	printf("Error: could not open file\n");
+           		return 1;
+				}
+				highest = stepRecord[0].steps;
+				for(i = 1; i <= numRows; i++){
+				if(stepRecord[i].steps > highest){
+					highest = stepRecord[i].steps;
+					highI = i;
+				}
+			}
+			printf("Largest Steps: %s %s\n", stepRecord[lowI].date, stepRecord[lowI].time);
 		break;
 
 		case 'E':
         case 'e':
-
+			if (!filename)
+        		{
+           	 	printf("Error: could not open file\n");
+           		return 1;
+				}
+			for(i=0; i <= numRows; i++){
+				mean += stepRecord[i].steps;
+			}
+			mean /= numRows;
+			printf("Mean step count: %f\n");
 		break;
 
 		case 'F':
         case 'f':
-
+        		if (!filename)
+        		{
+           	 	printf("Error: could not open file\n");
+           		return 1;
+				}
 		break;
 
 		case 'Q':
