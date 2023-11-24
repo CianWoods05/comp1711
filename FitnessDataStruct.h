@@ -5,8 +5,8 @@
 
 // Define an appropriate struct
 typedef struct {
-	char date[11];
-	char time[6];
+	char date[12];
+	char time[7];
 	int steps;
 } FITNESS_DATA;
 

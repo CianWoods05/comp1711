@@ -43,9 +43,9 @@ void tokeniseRecord(const char *input, const char *delimiter,
 // Complete the main function
 int main() {
 	int numRows;
-	char dateString[11];
-	char timeString[6];
-	char stepString[6];
+	char dateString[12];
+	char timeString[7];
+	char stepString[7];
 	int stepInteger;
 	int i = 0;
 	int buffer_size = 100;
@@ -91,16 +91,23 @@ int main() {
 					while (fgets(line_buffer, buffer_size, input) != NULL){
         			tokeniseRecord(line_buffer, "," , dateString, timeString, stepString);
         			stepInteger = atoi(stepString);
-        			for(i = 0; i < 11; i++){
+        			for(i = 0; i < 12; i++){
+						
             			stepRecord[numRows].date[i] = dateString[i];
-					}
+					}						
+					printf("%s", stepRecord[numRows].date);
 
-        			for(i = 0; i < 6; i++){
+					printf("\n");
+        			for(i = 0; i < 7; i++){
             			stepRecord[numRows].time[i] = timeString[i];
-        			}
+
+        			}					
+					printf("%s", stepRecord[numRows].time);
+
+					printf("\n");
 
         			stepRecord[numRows].steps = stepInteger;
-
+					printf("%d\n",stepRecord[numRows].steps);
         			numRows += 1;
     				}
 				}
@@ -124,8 +131,9 @@ int main() {
            	 	printf("Error: could not open file\n");
            		return 1;
 				}
+			lowI = 0;
 			lowest = stepRecord[0].steps;
-			for(i = 1; i <= numRows; i++){
+			for(i = 1; i < numRows; i++){
 				if(stepRecord[i].steps < lowest){
 					lowest = stepRecord[i].steps;
 					lowI = i;
@@ -141,14 +149,17 @@ int main() {
            	 	printf("Error: could not open file\n");
            		return 1;
 				}
+				highI = 0;
 				highest = stepRecord[0].steps;
-				for(i = 1; i <= numRows; i++){
+				for(i = 1; i < numRows; i++){
 				if(stepRecord[i].steps > highest){
 					highest = stepRecord[i].steps;
 					highI = i;
 				}
 			}
-			printf("Largest Steps: %s %s\n", stepRecord[lowI].date, stepRecord[lowI].time);
+			printf("Largest Steps:");
+			printf("%s",stepRecord[lowI].date);
+			printf("%s\n",stepRecord[lowI].time);
 		break;
 
 		case 'E':
@@ -158,11 +169,11 @@ int main() {
            	 	printf("Error: could not open file\n");
            		return 1;
 				}
-			for(i=0; i <= numRows; i++){
+			for(i=0; i < numRows; i++){
 				mean += stepRecord[i].steps;
 			}
 			mean /= numRows;
-			printf("Mean step count: %f\n");
+			printf("Mean step count: %.2f\n",mean);
 		break;
 
 		case 'F':
@@ -172,6 +183,19 @@ int main() {
            	 	printf("Error: could not open file\n");
            		return 1;
 				}
+				for(i = 0 ; i < numRows - 1 ; i++){
+					if(stepRecord[i].steps > 500 && start = 0){
+						start = i;
+					}
+					else if(stepRecord[i].steps > 500 && start != 0){
+						end = i;
+					}else{
+						start = 0;
+						end = 0;
+					}
+
+				}
+
 		break;
 
 		case 'Q':
