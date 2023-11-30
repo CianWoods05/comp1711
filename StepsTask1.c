@@ -87,10 +87,5 @@ int main() {
     }
     fclose(file);
 
-    printf("Number of records in file: %d\n", numRows);
-    for(i = 0; i < 3; i++){
-        printf("%s/%s/%d\n", stepRecord[i].date , stepRecord[i].time , stepRecord[i].steps);
-    }
-
     return 0;
 }
