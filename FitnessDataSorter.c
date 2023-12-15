@@ -33,9 +33,10 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 
 int main() {
+
     int numRows;
-    char dateString[12];
-    char timeString[7];
+    char dateString[11];
+    char timeString[6];
     char stepString[7];
     int stepInteger;
     int i = 0;
@@ -44,67 +45,77 @@ int main() {
     char line_buffer[100];
     char filename[100];
     FitnessData stepRecord[1000];
-    char* newFile;
+    
     int swaps = 1;
     printf("Enter Filename: ");
     fgets(line_buffer, buffer_size, stdin);
     sscanf(line_buffer, " %s ", filename);
 	FILE *input = fopen(filename, "r");
+    char *newFile = strcat(filename,".tsv");
     if (!input)
     {
-        printf("Error: could not open file\n");
+        printf("Error: invalid file\n");
         return 1;
     }  
 	else{
 	    while (fgets(line_buffer, buffer_size, input) != NULL){
         tokeniseRecord(line_buffer, "," , dateString, timeString, stepString);
         stepInteger = atoi(stepString);
-        for(i = 0; i < 12; i++){
+        if(strlen(dateString) == 0){
+            printf("Error: invalid file\n");
+            return 1;
+        }
+        for(i = 0; i < 11; i++){
             stepRecord[numRows].date[i] = dateString[i];
-	    }						
-        for(i = 0; i < 7; i++){
-        stepRecord[numRows].time[i] = timeString[i];
-        }					
+	    }		
+        if(strlen(timeString) == 0){
+            printf("Error: invalid file\n");
+            return 1;
+        }				
+        for(i = 0; i < 6; i++){
+            stepRecord[numRows].time[i] = timeString[i];
+        }		
+        if(strlen(stepString) == 0){
+            printf("Error: invalid file\n");
+            return 1;
+        }				
         stepRecord[numRows].steps = stepInteger;
         numRows += 1;
 	}
 
-
     do{
-        for(j=0;j < numRows;j++){
-            if(j = 0){
-                swaps = 0;
-            }
-            if(stepRecord[i+1].steps > stepRecord[i].steps){
-                swaps += 1;
-                for(i=0;i<12;i++){
-                    dateString[i] = stepRecord[i].date[i];
-                }
-                for(i = 0; i < 7; i++){
-                    timeString[i] = stepRecord[i].time[i];
-                }
-                stepInteger = stepRecord[i].steps;
-                for(i=0;i<12;i++){
-                    stepRecord[i].date[i] = stepRecord[i+1].date[i];
-                }
-                for(i=0;i<7;i++){
-                    stepRecord[i].time[i] = stepRecord[i+1].time[i];
-                }
-                stepRecord[i].steps = stepRecord[i+1].steps;
+        swaps = 0;  
+        for(j=0;j < (numRows - 1);j++){
 
-                for(i=0;i<12;i++){
-                    stepRecord[i+1].date[i] = dateString[i];
-                }
-                for(i = 0; i < 7; i++){
-                    stepRecord[i].time[i] = timeString[i];
-                }
-                stepRecord[i+1].steps = stepInteger;
+            if(stepRecord[j+1].steps > stepRecord[j].steps){
+
+                swaps +=1;
+
+                strncpy(dateString,stepRecord[j].date,11);
+                strncpy(timeString,stepRecord[j].time,6);
+                stepInteger = stepRecord[j].steps;
+
+
+                strncpy(stepRecord[j].date,stepRecord[j+1].date,11);
+                strncpy(stepRecord[j].time,stepRecord[j+1].time,6);
+                stepRecord[j].steps = stepRecord[j+1].steps;
+
+                strncpy(stepRecord[j+1].date,dateString,11);
+                strncpy(stepRecord[j+1].time,timeString,6);
+                stepRecord[j+1].steps = stepInteger;
             }
         }
-    }while(swaps>0);
+    }while(swaps != 0);
+
+    fclose(input);
+    FILE *file = fopen(newFile, "w");
+
+
     for(i=0;i<numRows;i++){
-        printf("%s\t%s\t%d\n", stepRecord[i].date,stepRecord[i].time,stepRecord[i].steps);
+        fprintf(file,"%s\t%s\t%d\n", stepRecord[i].date,stepRecord[i].time,stepRecord[i].steps);
     }
+    fclose(file);
+
     return 0;
 }
 }
