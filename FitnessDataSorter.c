@@ -39,12 +39,13 @@ int main() {
     char stepString[7];
     int stepInteger;
     int i = 0;
+    int j = 0;
     int buffer_size = 100;
     char line_buffer[100];
     char filename[100];
     FitnessData stepRecord[1000];
-    char* newFile
-
+    char* newFile;
+    int swaps = 1;
     printf("Enter Filename: ");
     fgets(line_buffer, buffer_size, stdin);
     sscanf(line_buffer, " %s ", filename);
@@ -69,4 +70,41 @@ int main() {
 	}
 
 
+    do{
+        for(j=0;j < numRows;j++){
+            if(j = 0){
+                swaps = 0;
+            }
+            if(stepRecord[i+1].steps > stepRecord[i].steps){
+                swaps += 1;
+                for(i=0;i<12;i++){
+                    dateString[i] = stepRecord[i].date[i];
+                }
+                for(i = 0; i < 7; i++){
+                    timeString[i] = stepRecord[i].time[i];
+                }
+                stepInteger = stepRecord[i].steps;
+                for(i=0;i<12;i++){
+                    stepRecord[i].date[i] = stepRecord[i+1].date[i];
+                }
+                for(i=0;i<7;i++){
+                    stepRecord[i].time[i] = stepRecord[i+1].time[i];
+                }
+                stepRecord[i].steps = stepRecord[i+1].steps;
+
+                for(i=0;i<12;i++){
+                    stepRecord[i+1].date[i] = dateString[i];
+                }
+                for(i = 0; i < 7; i++){
+                    stepRecord[i].time[i] = timeString[i];
+                }
+                stepRecord[i+1].steps = stepInteger;
+            }
+        }
+    }while(swaps>0);
+    for(i=0;i<numRows;i++){
+        printf("%s\t%s\t%d\n", stepRecord[i].date,stepRecord[i].time,stepRecord[i].steps);
+    }
+    return 0;
+}
 }
